@@ -13,18 +13,18 @@ The input data file is https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfi
 ### 2. Download data 
 
 Set working directory
-
+```
 setwd("./course_project")
-
+```
 
 Download the UCI Human Activity Recognition Using Smartphones Data Set and put it to the working directory
-
+```
 filename<-"UCI_HAR_Dataset.zip"
 if (!file.exists(filename)) {
   fileUrl<-"https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
   download.file(fileUrl, filename)
 }
-
+```
 Unzip file
 
 folder_name<-"UCI HAR Dataset"
