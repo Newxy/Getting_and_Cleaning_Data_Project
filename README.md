@@ -13,7 +13,9 @@ The input data file is https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfi
 ### 2. Download data 
 
 Set working directory
+'''
 setwd("./course_project")
+'''
 
 Download the UCI Human Activity Recognition Using Smartphones Data Set and put it to the working directory
 filename<-"UCI_HAR_Dataset.zip"
@@ -30,7 +32,7 @@ if(!file.exists(folder_name)) {
   
 ### 3. Processing data based on requirements
 
-*Step 1: Read all the data and merges the training and the test sets to create one data set.*
+**Step 1: Read all the data and merges the training and the test sets to create one data set.**
 
 Below is a description of all the variables used in this script
 * Variable features consists of feature names from "features.txt" 
@@ -83,7 +85,7 @@ testData<-cbind(testSubjects, testActivities, test)
 Combine training and test datasets
 allData<-rbind(trainData, testData)
 
-*Step 2: Extracts only the measurements on the mean and standard deviation for each measurement, that is, features with*
+**Step 2: Extracts only the measurements on the mean and standard deviation for each measurement, that is, features with**
 * mean(): Mean value
 * std(): Standard deviation
 
@@ -96,14 +98,14 @@ featureSelected<- (grepl("subjectID",colNames) | grepl("activityID",colNames) | 
 subsetData<-allData[,featureSelected==TRUE]
 
 
-*Step 3: Uses descriptive activity names in activity_labels variable to name the activities in the subsetData*
+**Step 3: Uses descriptive activity names in activity_labels variable to name the activities in the subsetData**
 subsetData=merge(subsetData, activity_labels, by.x="activityID", by.y="activityID", all.x =TRUE) 
 
 Check activities names
 head(subsetData$activity_name)
 
 
-*Step 4: Appropriately labels the data set with descriptive variable names.* 
+**Step 4: Appropriately labels the data set with descriptive variable names.** 
 Change varaible names:
 * Change mean() to mean
 * Change std() to stdev
@@ -130,7 +132,7 @@ colNames
 Reassign the modified variable names to the dataset
 colnames(subsetData) <- colNames
 
-*Step 5: Creates a second, independent tidy data set with the average of each variable for each activity and each subject.*
+**Step 5: Creates a second, independent tidy data set with the average of each variable for each activity and each subject.**
 
 Remove the activity type number as this data already has the activity names and activity ID information is redundant
 subsetData<-subsetData[, names(subsetData)!="activityID" ]
