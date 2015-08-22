@@ -29,7 +29,7 @@ if(!file.exists(folder_name)) {
   unzip(filename)
 }
   
-# Steo 1: Merges the training and the test sets to create one data set.
+# Step 1: Merges the training and the test sets to create one data set.
 
 # Loading the data
 # Load feature.txt file
