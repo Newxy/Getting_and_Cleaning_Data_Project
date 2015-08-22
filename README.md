@@ -26,11 +26,12 @@ if (!file.exists(filename)) {
 }
 ```
 Unzip file
-
+```
 folder_name<-"UCI HAR Dataset"
 if(!file.exists(folder_name)) {
   unzip(filename)
 }
+```
   
 ### 3. Processing data based on requirements
 
@@ -51,61 +52,81 @@ Below is a description of all the variables used in this script
 
 Loading the features and activity label files and rename the variables
 Load feature.txt file
+```
 features<-read.table("./UCI HAR Dataset/features.txt",header=FALSE)
 colnames(features)<-c("index", "feature_name")
+```
 
 Load activity_labels.txt and rename the variables
 activity_labels<-read.table("./UCI HAR Dataset/activity_labels.txt",header=FALSE)
 colnames(activity_labels)<-c("activityID", "activity_name")
 
 Load training data
+```
 train<-read.table("./UCI HAR Dataset/train/X_train.txt",header=FALSE)
 trainActivities<-read.table("./UCI HAR Dataset/train/Y_train.txt",header=FALSE)  
 trainSubjects<-read.table("./UCI HAR Dataset/train/subject_train.txt",header=FALSE) 
+```
 
 Assign column names
+```
 colnames(train)<-features[,2]
 colnames(trainActivities)<-"activityID"
 colnames(trainSubjects)<-"subjectID"
-
+```
 Combine training data
+```
 trainData<-cbind(trainSubjects, trainActivities, train)
+```
 
 Load test data
+```
 test<-read.table("./UCI HAR Dataset/test/X_test.txt",header=FALSE)
 testActivities<-read.table("./UCI HAR Dataset/test/Y_test.txt",header=FALSE)  
 testSubjects<-read.table("./UCI HAR Dataset/test/subject_test.txt",header=FALSE) 
+```
 
 Assign column names
+```
 colnames(test)<-features[,2]
 colnames(testActivities)<-"activityID"
 colnames(testSubjects)<-"subjectID"
+```
 
 Combine training data
+```
 testData<-cbind(testSubjects, testActivities, test)
+```
 
 Combine training and test datasets
+```
 allData<-rbind(trainData, testData)
+```
 
 **Step 2: Extracts only the measurements on the mean and standard deviation for each measurement, that is, features with**
 * mean(): Mean value
 * std(): Standard deviation
 
 View the structure of data
+```
 str(allData)
+```
 
 Select the mean and standard deviation and extract them into the variable subsetData
+```
 colNames  <- colnames(allData) 
 featureSelected<- (grepl("subjectID",colNames) | grepl("activityID",colNames) | (!grepl("-meanFreq",colNames) & (grepl("-mean()..-",colNames) | grepl("-std()..-",colNames) | grepl("-mean()",colNames) | grepl("-std()",colNames)))) 
 subsetData<-allData[,featureSelected==TRUE]
-
+```
 
 **Step 3: Uses descriptive activity names in activity_labels variable to name the activities in the subsetData**
+```
 subsetData=merge(subsetData, activity_labels, by.x="activityID", by.y="activityID", all.x =TRUE) 
-
+```
 Check activities names
+```
 head(subsetData$activity_name)
-
+```
 
 **Step 4: Appropriately labels the data set with descriptive variable names.** 
 Change varaible names:
@@ -118,6 +139,7 @@ Change varaible names:
 * Change Mag to Magnitude
 * Change BodyBody to Body
 
+```
 colNames<-colnames(subsetData)
 colNames<-gsub("mean\\()", "mean", colNames)
 colNames<-gsub("std\\()", "stdev", colNames)
@@ -127,23 +149,36 @@ colNames<-gsub("Acc", "Acceleration", colNames)
 colNames<-gsub("Gyro", "Gyroscope", colNames)
 colNames<-gsub("Mag", "Magnitude", colNames)
 colNames<-gsub("BodyBody", "Body", colNames)
+```
 
 Check colNames
+```
 colNames
+```
 
 Reassign the modified variable names to the dataset
+```
 colnames(subsetData) <- colNames
+```
 
 **Step 5: Creates a second, independent tidy data set with the average of each variable for each activity and each subject.**
 
 Remove the activity type number as this data already has the activity names and activity ID information is redundant
+```
 subsetData<-subsetData[, names(subsetData)!="activityID" ]
+```
 
 Create tidy data set with the average of each variable for each activity and each subject
+```
 tidyData<-aggregate(.~ activity_name + subjectID, subsetData, mean)
+```
 
 Sort data by subject ID and activity name
+```
 tidyDataFinal<-tidyData[order(tidyData$activity_name, tidyData$subjectID),]
+```
 
 ### 4. Output data to tidydata.txt
+```
 write.table(tidyDataFinal, file="tidydata.txt", row.name=FALSE,quote = FALSE)
+```
