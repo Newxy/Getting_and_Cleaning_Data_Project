@@ -8,16 +8,16 @@ This project will download and clean the UCI Human Activity Recognition Using Sm
 * Step 4: Appropriately labels the data set with descriptive variable names. 
 * Step 5: Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-The input data file is https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip and the output tidy data file is tidydata.txt
+The input data file is https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip and the output tidy data file is tidydata.txt.
 
 ### 2. Download data 
 
-Set working directory
+Set working directory:
 ```
 setwd("./course_project")
 ```
 
-Download the UCI Human Activity Recognition Using Smartphones Data Set and put it to the working directory
+Download the UCI Human Activity Recognition Using Smartphones Data Set and put it to the working directory:
 ```
 filename<-"UCI_HAR_Dataset.zip"
 if (!file.exists(filename)) {
@@ -25,7 +25,7 @@ if (!file.exists(filename)) {
   download.file(fileUrl, filename)
 }
 ```
-Unzip file
+Unzip the downloaded zip file:
 ```
 folder_name<-"UCI HAR Dataset"
 if(!file.exists(folder_name)) {
@@ -37,7 +37,7 @@ if(!file.exists(folder_name)) {
 
 **Step 1: Read all the data and merges the training and the test sets to create one data set.**
 
-Below is a description of all the variables used in this script
+Below is a description of all the variables used in this script.
 * Variable features consists of feature names from "features.txt" 
 * Variable activity_labels consists of activity IDs and names from "activity_labels.txt"
 * Variable train consists of measurements and derived data from "X_train.txt"
@@ -51,54 +51,56 @@ Below is a description of all the variables used in this script
 * Variable allData consists of the combined training and testing data
 
 Loading the features and activity label files and rename the variables
-Load feature.txt file
+Load feature.txt file:
 ```
 features<-read.table("./UCI HAR Dataset/features.txt",header=FALSE)
 colnames(features)<-c("index", "feature_name")
 ```
 
-Load activity_labels.txt and rename the variables
+Load activity_labels.txt and rename the variables:
+```
 activity_labels<-read.table("./UCI HAR Dataset/activity_labels.txt",header=FALSE)
 colnames(activity_labels)<-c("activityID", "activity_name")
+```
 
-Load training data
+Load training data:
 ```
 train<-read.table("./UCI HAR Dataset/train/X_train.txt",header=FALSE)
 trainActivities<-read.table("./UCI HAR Dataset/train/Y_train.txt",header=FALSE)  
 trainSubjects<-read.table("./UCI HAR Dataset/train/subject_train.txt",header=FALSE) 
 ```
 
-Assign column names
+Assign column names:
 ```
 colnames(train)<-features[,2]
 colnames(trainActivities)<-"activityID"
 colnames(trainSubjects)<-"subjectID"
 ```
-Combine training data
+Combine training data:
 ```
 trainData<-cbind(trainSubjects, trainActivities, train)
 ```
 
-Load test data
+Load test data:
 ```
 test<-read.table("./UCI HAR Dataset/test/X_test.txt",header=FALSE)
 testActivities<-read.table("./UCI HAR Dataset/test/Y_test.txt",header=FALSE)  
 testSubjects<-read.table("./UCI HAR Dataset/test/subject_test.txt",header=FALSE) 
 ```
 
-Assign column names
+Assign column names:
 ```
 colnames(test)<-features[,2]
 colnames(testActivities)<-"activityID"
 colnames(testSubjects)<-"subjectID"
 ```
 
-Combine training data
+Combine training data:
 ```
 testData<-cbind(testSubjects, testActivities, test)
 ```
 
-Combine training and test datasets
+Combine training and test datasets:
 ```
 allData<-rbind(trainData, testData)
 ```
@@ -107,12 +109,12 @@ allData<-rbind(trainData, testData)
 * mean(): Mean value
 * std(): Standard deviation
 
-View the structure of data
+View the structure of data:
 ```
 str(allData)
 ```
 
-Select the mean and standard deviation and extract them into the variable subsetData
+Select the mean and standard deviation and extract them into the variable subsetData:
 ```
 colNames  <- colnames(allData) 
 featureSelected<- (grepl("subjectID",colNames) | grepl("activityID",colNames) | (!grepl("-meanFreq",colNames) & (grepl("-mean()..-",colNames) | grepl("-std()..-",colNames) | grepl("-mean()",colNames) | grepl("-std()",colNames)))) 
@@ -123,7 +125,7 @@ subsetData<-allData[,featureSelected==TRUE]
 ```
 subsetData=merge(subsetData, activity_labels, by.x="activityID", by.y="activityID", all.x =TRUE) 
 ```
-Check activities names
+Check activities names:
 ```
 head(subsetData$activity_name)
 ```
@@ -151,29 +153,29 @@ colNames<-gsub("Mag", "Magnitude", colNames)
 colNames<-gsub("BodyBody", "Body", colNames)
 ```
 
-Check colNames
+Check the updated column names:
 ```
 colNames
 ```
 
-Reassign the modified variable names to the dataset
+Reassign the modified variable names to the dataset:
 ```
 colnames(subsetData) <- colNames
 ```
 
 **Step 5: Creates a second, independent tidy data set with the average of each variable for each activity and each subject.**
 
-Remove the activity type number as this data already has the activity names and activity ID information is redundant
+Remove the activity type number as this data already has the activity names and activity ID information is redundant:
 ```
 subsetData<-subsetData[, names(subsetData)!="activityID" ]
 ```
 
-Create tidy data set with the average of each variable for each activity and each subject
+Create tidy data set with the average of each variable for each activity and each subject:
 ```
 tidyData<-aggregate(.~ activity_name + subjectID, subsetData, mean)
 ```
 
-Sort data by subject ID and activity name
+Sort data by subject ID and activity name:
 ```
 tidyDataFinal<-tidyData[order(tidyData$activity_name, tidyData$subjectID),]
 ```
