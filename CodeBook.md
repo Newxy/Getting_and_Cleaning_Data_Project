@@ -1,14 +1,14 @@
 **Code Book**
 
-Actiivity_Name
-    The label of activitiy performed
-        WALKING            .Walking
-        WALKING_UPSTAIRS   .Walking upstairs
-        WALKING_DOWNSTAIRS
+Activity_Name
+&nbsp;&nbsp;&nbsp;&nbsp;The label of activitiy performed
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WALKING            .Walking
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WALKING_UPSTAIRS   .Walking upstairs
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WALKING_DOWNSTAIRS
  .Walking downstairs
-        SITTING            .Sitting
-        STANDING           .Standing
-        LAYING
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SITTING            .Sitting
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STANDING           .Standing
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LAYING
              .Laying
 
 subjectID
